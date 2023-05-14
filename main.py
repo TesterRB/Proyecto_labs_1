@@ -4,7 +4,7 @@ import pandas as pd
 app = FastAPI()
 
 # Importar el DataFrame
-df = pd.read_csv('dfListo.csv')
+df = pd.read_csv('funciones/dfListo.csv')
 
 # Funciones
 @app.get("/peliculas/mes/{mes}")
@@ -27,7 +27,7 @@ async def peliculas_mes(mes):
 @app.get("/peliculas/dia/{dia}")
 async def peliculas_dia(dia):
     df['release_date'] = pd.to_datetime(df['release_date'])
-    peliculas_dia = df[df['release_date'].dt.day == dia]
+    peliculas_dia = df[df['release_date'].dt.weekday == dia]
     cantidad = len(peliculas_dia)
     respuesta = {'dia': dia, 'cantidad': cantidad}
     return respuesta
