@@ -1,3 +1,5 @@
+from typing import Union
+import unicodedata as unicodedata
 from fastapi import FastAPI
 import pandas as pd
 
@@ -27,17 +29,19 @@ async def peliculas_mes(mes):
 @app.get("/peliculas/dia/{dia}")
 async def peliculas_dia(dia):
     df['release_date'] = pd.to_datetime(df['release_date'])
-    peliculas_dia = df[df['release_date'].dt.weekday == dia]
+    dias = {'Lunes': 0, 'Martes': 1, 'Miércoles': 2, 'Jueves': 3, 'Viernes': 4, 'Sábado': 5, 'Domingo': 6}
+    nombre_dia = dia.capitalize()
+    peliculas_dia = df[df['release_date'].dt.dayofweek == dias[nombre_dia]]
     cantidad = len(peliculas_dia)
-    respuesta = {'dia': dia, 'cantidad': cantidad}
+    respuesta = {'dia': nombre_dia, 'cantidad': int(cantidad)}
     return respuesta
 
 @app.get("/franquicia/{franquicia}")
 async def franquicia(franquicia):
     peliculas_franquicia = df[df['name_collection'] == franquicia]
     cantidad = len(peliculas_franquicia)
-    ganancia_total = peliculas_franquicia['return'].sum()
-    ganancia_promedio = peliculas_franquicia['return'].mean()
+    ganancia_total = peliculas_franquicia['revenue'].sum()
+    ganancia_promedio = peliculas_franquicia['revenue'].mean()
     respuesta = {'franquicia': franquicia, 'cantidad': cantidad, 'ganancia_total': ganancia_total, 'ganancia_promedio': ganancia_promedio}
     return respuesta
 
@@ -52,9 +56,9 @@ async def peliculas_pais(pais):
 async def productoras(productora):
     # Filtrar el DataFrame por el nombre de la productora
     df_productora = df[df['name_production'] == productora]
-    ganancia_total = df_productora['return'].sum()
+    ganancia_total = df_productora['revenue'].sum()
     cantidad = df_productora['id'].count()
-    respuesta = {'productora': productora, 'ganancia_total': ganancia_total, 'cantidad': cantidad}
+    respuesta = {'productora': productora, 'ganancia_total': int(ganancia_total), 'cantidad': int(cantidad)}
     
     return respuesta
 
@@ -64,6 +68,8 @@ async def retorno(titulo):
     pelicula = df[df['title'] == titulo]
     inversion = pelicula['budget'].iloc[0]
     ganancia = pelicula['revenue'].iloc[0]
-    retorno = (ganancia - inversion) / inversion if inversion != 0 else 0
-    anio = int(pelicula['release_date'].iloc)
+    retorno = pelicula['return'].iloc[0]
+    anio = pelicula['release_year'].iloc[0]
+    respuesta = {'pelicula': titulo, 'inversion': inversion, 'ganancia': ganancia, 'retorno': retorno, 'anio': int(anio)}
+    return respuesta
 
