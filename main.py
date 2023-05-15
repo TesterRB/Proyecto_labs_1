@@ -1,6 +1,6 @@
-from typing import Union
 from fastapi import FastAPI
 import pandas as pd
+import uvicorn
 
 app = FastAPI()
 
@@ -72,3 +72,5 @@ async def retorno(titulo):
     respuesta = {'pelicula': titulo, 'inversion': inversion, 'ganancia': ganancia, 'retorno': retorno, 'anio': int(anio)}
     return respuesta
 
+if __name__ == "__main__":
+    uvicorn.run(app, host="localhost", port=8000)
