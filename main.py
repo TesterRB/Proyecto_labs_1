@@ -1,5 +1,4 @@
 from typing import Union
-import unicodedata as unicodedata
 from fastapi import FastAPI
 import pandas as pd
 
