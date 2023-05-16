@@ -9,7 +9,7 @@ app = FastAPI()
 # Importar el DataFrame
 df = pd.read_csv('funciones/dfListo.csv')
 
-#Codigo para la funcion de Machine Learning
+#Codigo para la funcion de recomendacion
 muestra = df.sample(n=1000, random_state=42)
 nlp = spacy.load("en_core_web_md")
 docs = list(nlp.pipe(muestra["overview"].fillna("").values))
