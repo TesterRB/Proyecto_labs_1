@@ -1,11 +1,22 @@
 from fastapi import FastAPI
 import pandas as pd
+import numpy as np
 import uvicorn
+import spacy
 
 app = FastAPI()
 
 # Importar el DataFrame
 df = pd.read_csv('funciones/dfListo.csv')
+
+#Codigo para la funcion de Machine Learning
+muestra = df.sample(n=1000, random_state=42)
+nlp = spacy.load("en_core_web_md")
+docs = list(nlp.pipe(muestra["overview"].fillna("").values))
+embedding_matrix = np.array([doc.vector for doc in docs])
+cosine_sim = np.dot(embedding_matrix, embedding_matrix.T)
+muestra = muestra.drop_duplicates().reset_index(drop=True)
+indices = pd.Series(muestra.index, index=muestra['title'])
 
 # Funciones
 @app.get("/peliculas/mes/{mes}")
@@ -71,6 +82,17 @@ async def retorno(titulo):
     anio = pelicula['release_year'].iloc[0]
     respuesta = {'pelicula': titulo, 'inversion': inversion, 'ganancia': ganancia, 'retorno': retorno, 'anio': int(anio)}
     return respuesta
+
+
+@app.get("/retorno/{titulo}")
+async def recomendacion(title, cosine_sim=cosine_sim, muestra=muestra, indices=indices):
+    idx = indices[title]
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:6]
+    movie_indices = [i[0] for i in sim_scores]
+    peliculas_recomendadas = list(muestra.iloc[movie_indices]['title'])
+    return {'peliculas_recomendadas': peliculas_recomendadas}
 
 if __name__ == "__main__":
     uvicorn.run(app, host='0.0.0.0', port=8000)
