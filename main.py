@@ -11,7 +11,7 @@ df = pd.read_csv('funciones/dfListo.csv')
 
 #Codigo para la funcion de recomendacion
 muestra = df.sample(n=1000, random_state=42)
-nlp = spacy.load("en_core_web_md")
+nlp = spacy.load('en_core_web_md')
 docs = list(nlp.pipe(muestra["overview"].fillna("").values))
 embedding_matrix = np.array([doc.vector for doc in docs])
 cosine_sim = np.dot(embedding_matrix, embedding_matrix.T)
