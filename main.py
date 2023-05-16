@@ -90,7 +90,7 @@ async def retorno(titulo):
     return respuesta
 
 
-@app.get("/retorno/{titulo}")
+@app.get("/retorno/{recomendacion}")
 async def recomendacion(titulo):
     idx = indices[titulo]
     sim_scores = list(enumerate(cosine_sim[idx]))
