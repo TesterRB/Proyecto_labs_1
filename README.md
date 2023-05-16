@@ -98,4 +98,4 @@ La API proporciona diferentes endpoints para realizar consultas y obtener inform
 Ejecución de la Aplicación
 La aplicación se ejecuta utilizando el framework FastAPI. Para ejecutar la aplicación, se debe utilizar el siguiente comando:
 uvicorn main:app --reload
-La aplicación estará disponible en http://localhost:8000.
+La aplicación estará disponible en https://proyecto-labs-1.onrender.com/docs.
