@@ -1,6 +1,46 @@
 # Proyecto de Análisis y Recomendación de Películas
 
-Este proyecto tiene como objetivo realizar un análisis exploratorio de datos (EDA) y desarrollar un modelo de recomendación de películas utilizando técnicas de Machine Learning.
+Este proyecto tiene como objetivo realizar un proseso de ETL y normalizacion de datos a un dataset inicial para posteriormente realizar un análisis exploratorio de datos (EDA) y desarrollar un modelo de recomendación de películas utilizando técnicas de Machine Learning junto con el desarrollo de funciones de consulta para las API's puestas en Render.
+
+## Proceso de Extracción, Transformación y Carga (ETL)
+
+En este proyecto se realizó un proceso de Extracción, Transformación y Carga (ETL) de datos utilizando Python y la biblioteca Pandas. El objetivo fue obtener un conjunto de datos limpio y listo para su posterior análisis y procesamiento. A continuación se detallan los pasos realizados en el proceso ETL:
+
+### Importación de librerías
+
+Se importaron las librerías necesarias, incluyendo NumPy, Pandas y JSON.
+
+### Extracción de datos
+
+Se cargó el archivo CSV "movies_dataset.csv" utilizando la función `pd.read_csv()` de Pandas y se almacenó en el DataFrame `df`.
+
+### Limpieza de datos
+
+- Se rellenaron los valores faltantes en las columnas "revenue" y "budget" con ceros utilizando el método `fillna()`.
+- Se contabilizaron los valores nulos en las columnas "revenue" y "budget" para realizar una primera verificación de la calidad de los datos.
+- Se eliminaron las filas que tenían valores nulos en la columna "release_date" utilizando el método `dropna()`.
+- Se convirtió la columna "release_date" al formato de fecha utilizando la función `pd.to_datetime()`.
+- Se extrajo el año de la columna "release_date" y se creó la columna "release_year".
+- Se convirtieron las columnas "budget" y "return" al tipo de datos float64 utilizando el método `astype()`.
+- Se eliminaron las columnas innecesarias utilizando el método `drop()`.
+
+### Transformación de datos
+
+- Se reemplazaron los valores infinitos en la columna "return" por NaN utilizando el método `replace()`.
+- Se llenaron los valores faltantes en la columna "return" con ceros utilizando el método `fillna()`.
+- Se normalizaron los datos JSON de la columna "belongs_to_collection" utilizando la función `map()` y `eval()`.
+- Se realizaron operaciones de normalización y expansión de datos JSON en las columnas "genres", "production_companies", "production_countries" y "spoken_languages" utilizando las funciones `pd.json_normalize()` y bucles `for`.
+- Se crearon nuevas columnas para almacenar los valores normalizados de los datos JSON.
+- Se concatenaron todas las columnas normalizadas en un nuevo DataFrame llamado `dff`.
+- Se eliminaron las columnas originales que contenían datos JSON.
+
+### Carga de datos
+
+- Se creó un nuevo DataFrame llamado `Df` a partir del DataFrame `dff`.
+- Se guardó el DataFrame `Df` en un nuevo archivo CSV llamado "dfListo.csv" utilizando el método `to_csv()`.
+
+El proceso ETL se ha realizado con éxito y el resultado final es un archivo CSV limpio y listo para su uso en futuros análisis.
+
 
 ## EDA (Análisis Exploratorio de Datos)
 
