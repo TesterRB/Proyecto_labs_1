@@ -22,7 +22,25 @@ Este proyecto tiene como objetivo realizar un análisis exploratorio de datos (E
 
 ## Modelo de Recomendación de Películas
 
-Se desarrolló un modelo de recomendación de películas utilizando técnicas de Machine Learning. El modelo utiliza información de resúmenes de películas y calcula la similitud entre ellas para generar recomendaciones personalizadas.
+Modelo de Recomendación de Películas
+
+Se desarrolló un modelo de recomendación de películas utilizando técnicas de Machine Learning. El modelo utiliza información de resúmenes de películas para calcular la similitud entre ellas y generar recomendaciones personalizadas.
+
+Para construir el modelo, se realizaron los siguientes pasos:
+
+Importación de librerías: Se importaron las librerías necesarias, como NumPy, Pandas y Spacy.
+Carga del archivo CSV: Se cargó el archivo CSV que contiene los datos de películas en un DataFrame.
+Preprocesamiento de datos: Se seleccionó una muestra aleatoria de 1000 películas del DataFrame para reducir la carga computacional. Además, se utilizó el modelo pre-entrenado de Spacy ("en_core_web_md") para obtener representaciones vectoriales de los resúmenes de las películas.
+Cálculo de la matriz de similitud: Se calculó la similitud coseno entre los vectores de los resúmenes utilizando la matriz de embeddings generada. Esto permite medir la similitud entre los resúmenes de todas las películas en la muestra.
+Generación de recomendaciones: Se implementó la función get_similar_movies(title) que recibe el título de una película y devuelve una lista de las 5 películas más similares basadas en la similitud coseno. Las recomendaciones se basan en la similitud de los resúmenes de las películas.
+Ejemplo de uso del modelo:
+
+recommended_movies = get_similar_movies('Título de la película')
+print(recommended_movies)
+
+El modelo proporcionará una lista de las películas más similares a la película especificada, lo que puede ayudar a los usuarios a descubrir películas relacionadas o similares a sus preferencias.
+
+Recuerda ajustar el código del modelo a tu necesidad, asegurándote de utilizar los datos adecuados y adaptar los parámetros según corresponda.
 
 ## Uso de la API
 
