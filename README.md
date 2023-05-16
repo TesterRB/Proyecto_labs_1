@@ -35,8 +35,8 @@ Cálculo de la matriz de similitud: Se calculó la similitud coseno entre los ve
 Generación de recomendaciones: Se implementó la función get_similar_movies(title) que recibe el título de una película y devuelve una lista de las 5 películas más similares basadas en la similitud coseno. Las recomendaciones se basan en la similitud de los resúmenes de las películas.
 Ejemplo de uso del modelo:
 
-recommended_movies = get_similar_movies('Título de la película')
-print(recommended_movies)
+- `recommended_movies = get_similar_movies('Título de la película')`
+- `print(recommended_movies)`
 
 El modelo proporcionará una lista de las películas más similares a la película especificada, lo que puede ayudar a los usuarios a descubrir películas relacionadas o similares a sus preferencias.
 
