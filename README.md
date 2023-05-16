@@ -1,5 +1,5 @@
 <h1 align=center>PROYECTO INDIVIDUAL Nº1</h1>
-<h1 align=center>Proyecto de Análisis y Recomendación de Películas</h1>
+<h1 align=center>Análisis y Recomendación de Películas</h1>
 
 Este proyecto tiene como objetivo realizar un proseso de ETL y normalizacion de datos a un dataset inicial para posteriormente realizar un análisis exploratorio de datos (EDA) y desarrollar un modelo de recomendación de películas utilizando técnicas de Machine Learning junto con el desarrollo de funciones de consulta para las API's puestas en Render.
 
