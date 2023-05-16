@@ -2,21 +2,27 @@ from fastapi import FastAPI
 import pandas as pd
 import numpy as np
 import uvicorn
-import spacy
+from sklearn.metrics.pairwise import linear_kernel
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 app = FastAPI()
 
 # Importar el DataFrame
 df = pd.read_csv('funciones/dfListo.csv')
-
 #Codigo para la funcion de recomendacion
-muestra = df.sample(n=1000, random_state=42)
-nlp = spacy.load('en_core_web_md')
-docs = list(nlp.pipe(muestra["overview"].fillna("").values))
-embedding_matrix = np.array([doc.vector for doc in docs])
-cosine_sim = np.dot(embedding_matrix, embedding_matrix.T)
-muestra = muestra.drop_duplicates().reset_index(drop=True)
-indices = pd.Series(muestra.index, index=muestra['title'])
+ejemplo=df.sample(n=1000, random_state=42)
+tfidf = TfidfVectorizer(stop_words='english')
+# Rellenar los valores nulos en 'overview' con espacios vacíos
+ejemplo['overview'] = ejemplo['overview'].fillna('')
+# Entrenamiento del modelo TfidfVectorizer
+tfidf_matrix = tfidf.fit_transform(ejemplo['overview'])
+# Cálculo de similitud del coseno
+cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+# Eliminación de duplicados en ml
+ejemplo.drop_duplicates(inplace=True)
+ejemplo = ejemplo.reset_index(drop=True)
+# Creación de la serie de índices con los títulos de las películas
+indices = pd.Series(ejemplo.index, index=ejemplo['title'])
 
 # Funciones
 @app.get("/peliculas/mes/{mes}")
@@ -85,14 +91,14 @@ async def retorno(titulo):
 
 
 @app.get("/retorno/{titulo}")
-async def recomendacion(title, cosine_sim=cosine_sim, muestra=muestra, indices=indices):
-    idx = indices[title]
+async def recomendacion(titulo):
+    idx = indices[titulo]
     sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sorted(sim_scores, key= lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:6]
     movie_indices = [i[0] for i in sim_scores]
-    peliculas_recomendadas = list(muestra.iloc[movie_indices]['title'])
-    return {'peliculas_recomendadas': peliculas_recomendadas}
+    recommendations=list(ejemplo['title'].iloc[movie_indices].str.title())
+    return {'lista recomendada': recommendations}
 
 if __name__ == "__main__":
     uvicorn.run(app, host='0.0.0.0', port=8000)
