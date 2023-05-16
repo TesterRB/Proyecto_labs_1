@@ -3,4 +3,4 @@ uvicorn==0.20.0
 pandas
 numpy
 spacy
-en_core_web_md==3.1.0
+en_core_web_md
