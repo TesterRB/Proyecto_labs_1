@@ -1,0 +1,3 @@
+name: Install SpaCy model
+service: web
+command: bash python/startup.sh
